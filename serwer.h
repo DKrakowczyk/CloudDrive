@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-
+#include "UserList.h"
+#include <QFileDialog>
 QT_BEGIN_NAMESPACE
 class QLocalServer;
 QT_END_NAMESPACE
@@ -25,10 +26,15 @@ private:
     QLocalServer *server;
     QStringList dane;
     QString time;
-
+    UserList * userList;
+    QString dbPath;
+public slots:
+    void showMainWindow();
 private slots:
     void run_server();
     void show_server();
+    void on_actionLista_u_ytkownik_w_triggered();
+    void on_button_addDb_clicked();
 };
 
 #endif // SERWER_H

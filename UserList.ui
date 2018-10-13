@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>serwer</class>
- <widget class="QMainWindow" name="serwer">
+ <class>UserList</class>
+ <widget class="QWidget" name="UserList">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>serwer</string>
+   <string>Form</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QToolTip {
@@ -1267,125 +1267,36 @@ QDateEdit::down-arrow:focus {
 }
 </string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>611</width>
-      <height>148</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Nazwa serwera:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="server_name_field">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetNoConstraint</enum>
-       </property>
-       <item>
-        <widget class="QPushButton" name="button_addDb">
-         <property name="text">
-          <string>DODAJ BAZĘ DANYCH</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="dbPath">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">color: #888888;</string>
-         </property>
-         <property name="text">
-          <string>Wybierz plik bazy danych...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QPushButton" name="run_server">
-         <property name="text">
-          <string>Uruchom serwer</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="server_status">
-         <property name="text">
-          <string>Status serwera</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>624</width>
-     <height>20</height>
+     <x>20</x>
+     <y>100</y>
+     <width>591</width>
+     <height>351</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuSerwer_Data">
-    <property name="title">
-     <string>Serwer</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuaaa">
-    <property name="title">
-     <string>Użytkownicy</string>
-    </property>
-    <addaction name="actionLista_u_ytkownik_w"/>
-   </widget>
-   <addaction name="menuSerwer_Data"/>
-   <addaction name="menuaaa"/>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="2">
+     <widget class="QTableView" name="tableView"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_dbStatus">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Zamknij</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionLista_u_ytkownik_w">
-   <property name="text">
-    <string>Lista użytkowników</string>
-   </property>
-  </action>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

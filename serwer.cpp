@@ -16,6 +16,7 @@ serwer::serwer(QWidget *parent) :
     //Uruchom serwer
     connect(ui->run_server, SIGNAL(clicked()),this,SLOT(run_server()));
     connect(ui->server_status, SIGNAL(clicked()),this,SLOT(show_server()));
+
 }
 
 
@@ -48,4 +49,31 @@ void serwer::show_server()
 serwer::~serwer()
 {
     delete ui;
+}
+
+void serwer::showMainWindow(){
+    ui->centralWidget->show();
+}
+
+void serwer::on_actionLista_u_ytkownik_w_triggered()
+{
+    userList = new UserList(this);
+    userList->setDbPath(dbPath);
+    connect(userList,SIGNAL(closeWindow()),this,SLOT(showMainWindow()));
+    ui->centralWidget->hide();
+    userList->show();
+
+}
+
+void serwer::on_button_addDb_clicked()
+{
+    dbPath = QFileDialog::getOpenFileName(
+                this,
+                tr("Wybierz Bazę danych"),
+                "C://",
+               "Wszystkie pliki (\"*\");;Pliki Bazy SQLITE (*.db)"
+
+                );
+    ui->dbPath->setText(dbPath);
+
 }
