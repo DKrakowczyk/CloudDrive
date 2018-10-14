@@ -6,7 +6,7 @@ UserList::UserList(QWidget *parent) :
     ui(new Ui::UserList)
 {
     ui->setupUi(this);
-
+    setDbPath();
     bazaDanych = new BazaDanych("QSQLITE",dbPath);
     ui->label_dbStatus->setText(bazaDanych->getStatus());
     ui->tableView->setModel(bazaDanych->getData("select * from users"));
@@ -23,6 +23,18 @@ void UserList::on_pushButton_clicked()
     emit closeWindow();
     this->close();
 }
-void UserList::setDbPath(QString path){
-    dbPath = path;
+void UserList::setDbPath(){
+    QFile file;
+    file.setFileName("con_string.txt");
+
+    if(file.open((QIODevice::ReadOnly)))
+    {
+        QTextStream in(&file);
+        QString con_str = in.readLine();
+        if(con_str != "")
+        {
+            dbPath = con_str;
+        }
+    }
+
 }

@@ -13,7 +13,7 @@ class UserList : public QWidget
 
 public:
     explicit UserList(QWidget *parent = nullptr);
-    void setDbPath(QString);
+    void setDbPath();
     ~UserList();
 signals:
     void closeWindow();

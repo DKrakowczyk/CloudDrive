@@ -30,11 +30,14 @@ private:
     QString dbPath;
 public slots:
     void showMainWindow();
+    void set_con_str(QString);
+    void db_placeholder();
 private slots:
     void run_server();
     void show_server();
     void on_actionLista_u_ytkownik_w_triggered();
     void on_button_addDb_clicked();
+
 };
 
 #endif // SERWER_H

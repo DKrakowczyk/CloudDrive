@@ -1268,7 +1268,7 @@ QDateEdit::down-arrow:focus {
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1307,7 +1307,7 @@ QDateEdit::down-arrow:focus {
        <item>
         <widget class="QPushButton" name="button_addDb">
          <property name="text">
-          <string>DODAJ BAZĘ DANYCH</string>
+          <string>Wybierz plik</string>
          </property>
         </widget>
        </item>
@@ -1346,6 +1346,32 @@ QDateEdit::down-arrow:focus {
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="serwer_info">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>380</y>
+      <width>201</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="db_image">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>200</y>
+      <width>256</width>
+      <height>256</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -1353,7 +1379,7 @@ QDateEdit::down-arrow:focus {
      <x>0</x>
      <y>0</y>
      <width>624</width>
-     <height>20</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSerwer_Data">
