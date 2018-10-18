@@ -7,6 +7,7 @@
 #include <QtNetwork>
 #include <QTime>
 #include <QPixmap>
+
 serwer::serwer(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::serwer)
@@ -17,11 +18,13 @@ serwer::serwer(QWidget *parent) :
 
     //Uruchom serwer
     connect(ui->run_server, SIGNAL(clicked()),this,SLOT(run_server()));
+    //Informacje o serwerze
     connect(ui->server_status, SIGNAL(clicked()),this,SLOT(show_server()));
 
 }
 
 
+//----------------------------------SERWER----------------------------------
 void serwer::run_server()
 {
     server = new QLocalServer(this);
@@ -38,23 +41,44 @@ void serwer::run_server()
                               .arg(server->serverName()));
     }
     time = QTime::currentTime().toString();
+
+    //Dane udostępniane przez serwer
+    dane << tr("SERWER DZIAŁA I ON TO WYSŁAŁ A NIE JAKAŚ PODRABIANA ZMIENNA");
+
+    //Udostępnia dane
+    connect(server, &QLocalServer::newConnection, this, &serwer::share_data);
+
+    //Obie linijki poglądowe i do zmiany!
 }
 
 void serwer::show_server()
 {
     QMessageBox::information(this,tr("Komunikat serwera danych"),
-                          tr("Nazwa serwera: %1\nCzas uruchomienia: %2"),
-                             tr("Baza danych: %3")
+                          tr("Nazwa serwera: %1\nCzas uruchomienia: %2\n")
                                 .arg(ui->server_name_field->text())
-                                .arg(time)
-                                .arg(ui->dbPath->text()));
+                                .arg(time));
 }
 
+void serwer::share_data()
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_10);
+    const QString message = dane.at(0);
+    out<< quint32(message.size());
+    out<< message;
 
-void serwer::showMainWindow(){
-    ui->centralWidget->show();
+    QLocalSocket *clientConnection = server->nextPendingConnection();
+    connect(clientConnection, &QLocalSocket::disconnected,
+            clientConnection, &QLocalSocket::deleteLater);
+
+    clientConnection->write(block);
+    clientConnection->flush();
+    clientConnection->disconnectFromServer();
+
 }
 
+//----------------------------------OBSŁUGA PRZYCISKÓW----------------------------------
 void serwer::on_actionLista_u_ytkownik_w_triggered()
 {
     userList = new UserList(this);
@@ -65,6 +89,22 @@ void serwer::on_actionLista_u_ytkownik_w_triggered()
 
 }
 
+void serwer::on_button_addDb_clicked()
+{
+    dbPath = QFileDialog::getOpenFileName(
+                this,
+                tr("Wybierz Bazę danych"),
+                "../",
+               "Pliki Bazy SQLITE (*.db)"
+
+                );
+
+    ui->dbPath->setText(dbPath);
+    set_con_str(ui->dbPath->text());
+    ui->serwer_info->setText("Dane zostaną zapisane..");
+}
+
+//----------------------------------OBSŁUGA BAZY DANYCH----------------------------------
 void serwer::set_con_str(QString str)
 {
     QFile file;
@@ -81,45 +121,36 @@ void serwer::set_con_str(QString str)
 
 void serwer::db_placeholder()
 {
-QFile file;
-file.setFileName("con_string.txt");
+    QFile file;
+    file.setFileName("con_string.txt");
 
-if(file.open((QIODevice::ReadOnly)))
-{
-    QTextStream in(&file);
-    QString placeholder = in.readLine();
-    if(placeholder != "")
+    if(file.open((QIODevice::ReadOnly)))
     {
-        ui->dbPath->setText(placeholder);
-        ui->serwer_info->setText("Pomyślnie wczytano konfigurację!");
-        QPixmap pic(":/db/db.png");
-        ui->db_image->setPixmap(pic);
+        QTextStream in(&file);
+        QString placeholder = in.readLine();
+
+        if(placeholder != "")
+        {
+            ui->dbPath->setText(placeholder);
+            ui->serwer_info->setText("Pomyślnie wczytano konfigurację!");
+            QPixmap pic(":/db/db.png");
+            ui->db_image->setPixmap(pic);
+        }
+        else
+        {
+            ui->dbPath->setText("Wybierz bazę danych...");
+            ui->serwer_info->setText("Skonfiguruj serwer..");
+            QPixmap pic(":/db/refresh.png");
+            ui->db_image->setPixmap(pic);
+        }
     }
-    else
-    {
-        ui->dbPath->setText("Wybierz bazę danych...");
-        ui->serwer_info->setText("Skonfiguruj serwer..");
-        QPixmap pic(":/db/refresh.png");
-        ui->db_image->setPixmap(pic);
-    }
-}
-file.close();
-}
-void serwer::on_button_addDb_clicked()
-{
-    dbPath = QFileDialog::getOpenFileName(
-                this,
-                tr("Wybierz Bazę danych"),
-                "../",
-               "Pliki Bazy SQLITE (*.db)"
-
-                );
-
-    ui->dbPath->setText(dbPath);
-    set_con_str(ui->dbPath->text());
-    ui->serwer_info->setText("Dane zostaną zapisane..");
+    file.close();
 }
 
+
+void serwer::showMainWindow(){
+    ui->centralWidget->show();
+}
 
 serwer::~serwer()
 {

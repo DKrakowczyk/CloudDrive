@@ -32,6 +32,7 @@ public slots:
     void showMainWindow();
     void set_con_str(QString);
     void db_placeholder();
+    void share_data();
 private slots:
     void run_server();
     void show_server();
