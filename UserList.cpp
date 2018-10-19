@@ -9,13 +9,16 @@ UserList::UserList(QWidget *parent) :
     setDbPath();
     bazaDanych = new BazaDanych("QSQLITE",dbPath);
     ui->label_dbStatus->setText(bazaDanych->getStatus());
-    ui->tableView->setModel(bazaDanych->getData("select * from users"));
+    this->refresh();
+    connect(ui->tableView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onTableClicked(const QModelIndex &)));
+
 }
 
 UserList::~UserList()
 {
     delete ui;
     delete bazaDanych;
+    delete editForm;
 }
 
 void UserList::on_pushButton_clicked()
@@ -23,6 +26,26 @@ void UserList::on_pushButton_clicked()
     emit closeWindow();
     this->close();
 }
+
+void UserList::onTableClicked(const QModelIndex & indexNumber){
+    editForm = new userEditForm(this);
+    QString id = indexNumber.siblingAtColumn(0).data().toString();
+    QString login = indexNumber.siblingAtColumn(1).data().toString();
+    QString password = indexNumber.siblingAtColumn(2).data().toString();
+    connect(editForm, SIGNAL(deleteSignal()), this, SLOT(deleteRow(id)));
+    editForm->setFields(id,login,password);
+    editForm->show();
+}
+
+void UserList::deleteRow(QString row){
+    bazaDanych->deleteRow(row.toInt());
+    this->refresh();
+}
+
+void UserList::refresh(){
+ui->tableView->setModel(bazaDanych->getData("select * from users"));
+}
+
 void UserList::setDbPath(){
     QFile file;
     file.setFileName("con_string.txt");

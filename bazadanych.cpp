@@ -28,6 +28,14 @@ QSqlQueryModel * BazaDanych::getData(QString q){
         return model;
 }
 
+void BazaDanych::deleteRow(int row){
+    QSqlQueryModel *  model = new QSqlQueryModel();
+    QSqlQuery * query = new QSqlQuery(mydb);
+    query->prepare("delete * from users where id = ?");
+    query->addBindValue(row);
+    query->exec();
+}
+
 BazaDanych::~BazaDanych(){
     mydb.close();
 }

@@ -29,16 +29,19 @@ SOURCES += \
         main.cpp \
         serwer.cpp \
     UserList.cpp \
-    bazadanych.cpp
+    bazadanych.cpp \
+    usereditform.cpp
 
 HEADERS += \
         serwer.h \
     UserList.h \
-    bazadanych.h
+    bazadanych.h \
+    usereditform.h
 
 FORMS += \
         serwer.ui \
-    UserList.ui
+    UserList.ui \
+    usereditform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

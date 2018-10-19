@@ -1,6 +1,7 @@
 #ifndef USERLIST_H
 #define USERLIST_H
 #include "bazadanych.h"
+#include "usereditform.h"
 #include <QWidget>
 
 namespace Ui {
@@ -14,15 +15,20 @@ class UserList : public QWidget
 public:
     explicit UserList(QWidget *parent = nullptr);
     void setDbPath();
+    void refresh();
     ~UserList();
 signals:
     void closeWindow();
 private slots:
     void on_pushButton_clicked();
+public slots:
+   void onTableClicked(const QModelIndex &);
 
+   void deleteRow(QString);
 private:
     Ui::UserList *ui;
     BazaDanych * bazaDanych;
+    userEditForm * editForm;
     QString dbPath;
 };
 
