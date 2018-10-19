@@ -23,13 +23,14 @@ private slots:
     void on_pushButton_clicked();
 public slots:
    void onTableClicked(const QModelIndex &);
-
-   void deleteRow(QString);
+   void changeRow();
+   void deleteRow();
 private:
     Ui::UserList *ui;
     BazaDanych * bazaDanych;
     userEditForm * editForm;
     QString dbPath;
+    QString currentId,login,password;
 };
 
 #endif // USERLIST_H

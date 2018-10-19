@@ -14,10 +14,14 @@ public:
     explicit userEditForm(QWidget *parent = nullptr);
     ~userEditForm();
     void setFields(QString,QString,QString);
+    QString getLogin();
+    QString getpassword();
 private slots:
     void on_buttonReject_clicked();
 
     void on_buttonDelete_clicked();
+
+    void on_buttonAccept_clicked();
 
 private:
     Ui::userEditForm *ui;
@@ -26,6 +30,7 @@ private:
 
 signals:
     void deleteSignal();
+    void changeSignal();
 };
 
 #endif // USEREDITFORM_H

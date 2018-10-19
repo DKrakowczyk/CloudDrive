@@ -15,7 +15,8 @@ public:
     void startDb();
     QString getStatus();
     QSqlQueryModel * getData(QString);
-    void deleteRow(int);
+    void deleteRow(QString);
+    void changeData(QString,QString,QString);
 };
 
 #endif // BAZADANYCH_H

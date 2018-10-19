@@ -28,11 +28,21 @@ QSqlQueryModel * BazaDanych::getData(QString q){
         return model;
 }
 
-void BazaDanych::deleteRow(int row){
+void BazaDanych::deleteRow(QString row){
     QSqlQueryModel *  model = new QSqlQueryModel();
     QSqlQuery * query = new QSqlQuery(mydb);
-    query->prepare("delete * from users where id = ?");
-    query->addBindValue(row);
+    query->prepare("delete from users where id = :row");
+    query->bindValue(":row", row);
+    query->exec();
+}
+
+
+void BazaDanych::changeData(QString row,QString log, QString pass){
+    QSqlQuery * query = new QSqlQuery(mydb);
+    query->prepare("update users set login = :log, password= :pass where id = :row");
+    query->bindValue(":row", row);
+    query->bindValue(":log", log);
+    query->bindValue(":pass", pass);
     query->exec();
 }
 

@@ -29,16 +29,24 @@ void UserList::on_pushButton_clicked()
 
 void UserList::onTableClicked(const QModelIndex & indexNumber){
     editForm = new userEditForm(this);
-    QString id = indexNumber.siblingAtColumn(0).data().toString();
-    QString login = indexNumber.siblingAtColumn(1).data().toString();
-    QString password = indexNumber.siblingAtColumn(2).data().toString();
-    connect(editForm, SIGNAL(deleteSignal()), this, SLOT(deleteRow(id)));
-    editForm->setFields(id,login,password);
+    currentId = indexNumber.siblingAtColumn(0).data().toString();
+    login = indexNumber.siblingAtColumn(1).data().toString();
+    password = indexNumber.siblingAtColumn(2).data().toString();
+    connect(editForm, SIGNAL(deleteSignal()), this, SLOT(deleteRow()));
+    connect(editForm, SIGNAL(changeSignal()), this, SLOT(changeRow()));
+    editForm->setFields(currentId,login,password);
     editForm->show();
 }
 
-void UserList::deleteRow(QString row){
-    bazaDanych->deleteRow(row.toInt());
+void UserList::deleteRow(){
+    bazaDanych->deleteRow(currentId);
+    this->refresh();
+}
+
+void UserList::changeRow(){
+    login = editForm->getLogin();
+    password = editForm->getpassword();
+    bazaDanych->changeData(currentId,login,password);
     this->refresh();
 }
 

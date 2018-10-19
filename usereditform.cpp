@@ -36,4 +36,19 @@ void userEditForm::on_buttonReject_clicked()
 void userEditForm::on_buttonDelete_clicked()
 {
    emit deleteSignal();
+    this->close();
+}
+
+QString userEditForm::getLogin(){
+    return this->ui->textLogin->toPlainText();
+}
+
+QString userEditForm::getpassword(){
+    return this->ui->textPassword->toPlainText();
+}
+
+void userEditForm::on_buttonAccept_clicked()
+{
+    emit changeSignal();
+    this->close();
 }
