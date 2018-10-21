@@ -4,4 +4,5 @@
         <file>db.png</file>
         <file>refresh.png</file>
     </qresource>
+    <qresource prefix="/files"/>
 </RCC>

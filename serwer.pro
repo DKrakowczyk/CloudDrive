@@ -30,13 +30,15 @@ SOURCES += \
         serwer.cpp \
     UserList.cpp \
     bazadanych.cpp \
-    usereditform.cpp
+    usereditform.cpp \
+    filemanager.cpp
 
 HEADERS += \
         serwer.h \
     UserList.h \
     bazadanych.h \
-    usereditform.h
+    usereditform.h \
+    filemanager.h
 
 FORMS += \
         serwer.ui \

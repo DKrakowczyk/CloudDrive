@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include "UserList.h"
 #include <QFileDialog>
+#include "filemanager.h"
 QT_BEGIN_NAMESPACE
 class QLocalServer;
 QT_END_NAMESPACE

@@ -21,6 +21,11 @@ serwer::serwer(QWidget *parent) :
     //Informacje o serwerze
     connect(ui->server_status, SIGNAL(clicked()),this,SLOT(show_server()));
 
+    FileManager * fm = new FileManager(this);
+    QFile * plik = new QFile("C:/Users/dariu/Documents/qt/serwer/build-serwer-Desktop_Qt_5_11_2_MinGW_32bit-Release/ui_serwer.h");
+    fm->createDirectory("ryjek");
+    fm->addFile("ryjek",plik);
+    fm->changeName("ryjek","ui_serwer.h","judasz na patelni.h");
 }
 
 
