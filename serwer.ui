@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>624</width>
-    <height>465</height>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1274,10 +1274,17 @@ QDateEdit::down-arrow:focus {
       <x>10</x>
       <y>10</y>
       <width>611</width>
-      <height>180</height>
+      <height>214</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
@@ -1294,6 +1301,29 @@ QDateEdit::down-arrow:focus {
            <width>100</width>
            <height>0</height>
           </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Port:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="server_port">
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>1024</string>
+         </property>
+         <property name="maxLength">
+          <number>4</number>
          </property>
         </widget>
        </item>
@@ -1325,6 +1355,13 @@ QDateEdit::down-arrow:focus {
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -1363,7 +1400,7 @@ QDateEdit::down-arrow:focus {
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>380</y>
+      <y>430</y>
       <width>201</width>
       <height>16</height>
      </rect>
@@ -1375,8 +1412,8 @@ QDateEdit::down-arrow:focus {
    <widget class="QLabel" name="db_image">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>200</y>
+      <x>440</x>
+      <y>240</y>
       <width>256</width>
       <height>256</height>
      </rect>

@@ -19,6 +19,7 @@ serwer::serwer(QWidget* parent)
     server = new QTcpServer(this);
     ui->setupUi(this);
     ui->server_name_field->setText("localhost");
+    ui->actionLista_u_ytkownik_w->setDisabled(1);
     db_placeholder();
 
     //Uruchom serwer
@@ -26,8 +27,6 @@ serwer::serwer(QWidget* parent)
     //Informacje o serwerze
     connect(ui->server_status, SIGNAL(clicked()), this, SLOT(show_server()));
     connect(server, SIGNAL(newConnection()), SLOT(onNewConnection()));
-    connect(this, SIGNAL(dataReceived(QByteArray)), this, SLOT(chooseAction(QByteArray)));
-
     //    FileManager * fm = new FileManager(this);
     //    QFile * plik = new QFile("C:/Users/dariu/Documents/qt/serwer/build-serwer-Desktop_Qt_5_11_2_MinGW_32bit-Release/ui_serwer.h");
     //    fm->createDirectory("ryjek");
@@ -40,29 +39,42 @@ void serwer::chooseAction(QByteArray data)
     QByteArray analyze = data;
     QList<QByteArray> dane = analyze.split('|');
 
-    if (dane.takeAt(0) == "log") {
-        QByteArray login = dane.takeAt(0);
-        QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
-        if (login != "" && password != "") {
-            BazaDanych* baza = new BazaDanych("QSQLITE", ui->dbPath->text());
-
-            qDebug() << "wyrazenie" + baza->getId(login, password);
+        if (dane.takeAt(0) == "log")
+        {
+            QByteArray login = dane.takeAt(0);
+            QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
+                if (login != "" && password != "")
+                {
+                    BazaDanych* baza = new BazaDanych("QSQLITE", ui->dbPath->text());
+                    share_data(data);
+                    qDebug() << "wyrazenie" + baza->getId(login, password);
+                }
         }
+        else if(dane.takeAt(0) == "reg")
+        {
 
-        else {
         }
+        else if(dane.takeAt(0)== "send")
+        {
 
-        //            qDebug()<< "Login:"+login;
-        //            qDebug()<< "Haslo:"+password;
-        //            qDebug()<< dane;
-    }
+        }
+        else if(dane.takeAt(0)=="get")
+        {
+
+        }
 }
-
+void serwer::share_data(QByteArray response)
+{
+    QTcpSocket *user = (QTcpSocket*)sender();
+    QByteArray block;
+    block.append(response);
+    user->write(block);
+}
 //----------------------------------SERWER----------------------------------
 void serwer::newServerConnection()
 {
 
-    if (!server->listen((QHostAddress)ui->server_name_field->text(), 1024)) {
+    if (!server->listen((QHostAddress)ui->server_name_field->text(), ui->server_port->text().toInt())) {
         QMessageBox::critical(this, tr("Komunikat serwera danych"),
             tr("Nie udało się uruchomić usługi: %1.")
                 .arg(server->errorString()));
@@ -71,9 +83,16 @@ void serwer::newServerConnection()
         QMessageBox::information(this, tr("Komunikat serwera danych"),
             tr("Serwer uruchomiony: %1.")
                 .arg(ui->server_name_field->text()));
+
+        //Kontrola inputow
         ui->stop_server->setEnabled(1);
         ui->server_status->setEnabled(1);
         ui->run_server->setDisabled(1);
+        ui->server_name_field->setDisabled(1);
+        ui->server_port->setDisabled(1);
+        ui->button_addDb->setDisabled(1);
+        ui->dbPath->setDisabled(1);
+        ui->actionLista_u_ytkownik_w->setEnabled(1);
     }
     time = QTime::currentTime().toString();
 }
@@ -85,21 +104,20 @@ void serwer::onNewConnection()
         connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
         QByteArray* buffer = new QByteArray();
         qint32* s = new qint32(0);
-        socket->write("DOSZLO");
         buffers.insert(socket, buffer);
         sizes.insert(socket, s);
     }
 }
 
-//void serwer::disconnected()
-//{
-//    QTcpSocket *socket = static_cast<QTcpSocket*>(sender());
-//    QByteArray *buffer = buffers.value(socket);
-//    qint32 *s = sizes.value(socket);
-//    socket->deleteLater();
-//    delete buffer;
-//    delete s;
-//}
+void serwer::disconnected()
+{
+    QTcpSocket *socket = static_cast<QTcpSocket*>(sender());
+    QByteArray *buffer = buffers.value(socket);
+    qint32 *s = sizes.value(socket);
+    socket->deleteLater();
+    delete buffer;
+    delete s;
+}
 
 void serwer::readyRead()
 {
@@ -123,14 +141,13 @@ void serwer::readyRead()
                 buffer->remove(0, size);
                 size = 0;
                 *s = size;
-                emit dataReceived(data);
+                chooseAction(data);
                 qDebug() << data;
-                share_data(socket);
             }
         }
     }
-}
 
+}
 qint32 ArrayToInt(QByteArray source)
 {
     qint32 temp;
@@ -141,20 +158,10 @@ qint32 ArrayToInt(QByteArray source)
 void serwer::show_server()
 {
     QMessageBox::information(this, tr("Komunikat serwera danych"),
-        tr("Nazwa serwera: %1\nCzas uruchomienia: %2\n")
+        tr("Nazwa serwera: %1\nPort: %2\nCzas uruchomienia: %3\n")
             .arg(ui->server_name_field->text())
+            .arg(ui->server_port->text())
             .arg(time));
-}
-
-void serwer::share_data(QTcpSocket *socket)
-{
-
-        QByteArray block;
-        block.append("asas");
-        qDebug()<<socket->write(block);
-
-
-
 }
 
 //----------------------------------OBSŁUGA PRZYCISKÓW----------------------------------
@@ -178,6 +185,23 @@ void serwer::on_button_addDb_clicked()
     ui->dbPath->setText(dbPath);
     set_con_str(ui->dbPath->text());
     ui->serwer_info->setText("Dane zostaną zapisane..");
+}
+void serwer::on_stop_server_clicked()
+{
+    server->close();
+    if (!server->isListening()) {
+        QMessageBox::information(this, tr("Komunikat serwera danych"),
+            tr("Serwer zatrzymany: %1.")
+                .arg(ui->server_name_field->text()));
+    }
+    //Kontrola inputow
+    ui->stop_server->setDisabled(1);
+    ui->server_status->setDisabled(1);
+    ui->run_server->setEnabled(1);
+    ui->server_name_field->setEnabled(1);
+    ui->server_port->setEnabled(1);
+    ui->button_addDb->setEnabled(1);
+    ui->dbPath->setEnabled(1);
 }
 
 //----------------------------------OBSŁUGA BAZY DANYCH----------------------------------
@@ -229,14 +253,3 @@ serwer::~serwer()
     delete ui;
 }
 
-void serwer::on_stop_server_clicked()
-{
-    server->close();
-    if (!server->isListening()) {
-        QMessageBox::information(this, tr("Komunikat serwera danych"),
-            tr("Serwer zatrzymany: %1.")
-                .arg(ui->server_name_field->text()));
-    }
-    ui->stop_server->setDisabled(1);
-    ui->server_status->setDisabled(1);
-}
