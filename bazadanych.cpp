@@ -36,7 +36,23 @@ void BazaDanych::deleteRow(QString row){
     query->exec();
 }
 
-
+QString BazaDanych::getId(QString login, QString password)
+{
+    QSqlQuery * query = new QSqlQuery(mydb);
+    query->prepare("SELECT login FROM users WHERE login = :log AND password= :pass");
+    query->bindValue(":log", login);
+    query->bindValue(":pass", password);
+    query->exec();
+    QString a;
+    if(query->isActive())
+    {
+        while(query->next())
+        {
+        a = query->value(0).toString();
+        }
+    }
+    return a;
+}
 void BazaDanych::changeData(QString row,QString log, QString pass){
     QSqlQuery * query = new QSqlQuery(mydb);
     query->prepare("update users set login = :log, password= :pass where id = :row");
@@ -45,6 +61,7 @@ void BazaDanych::changeData(QString row,QString log, QString pass){
     query->bindValue(":pass", pass);
     query->exec();
 }
+
 
 BazaDanych::~BazaDanych(){
     mydb.close();

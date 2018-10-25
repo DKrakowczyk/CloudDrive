@@ -1274,7 +1274,7 @@ QDateEdit::down-arrow:focus {
       <x>10</x>
       <y>10</y>
       <width>611</width>
-      <height>171</height>
+      <height>180</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -1337,8 +1337,21 @@ QDateEdit::down-arrow:focus {
        </item>
        <item>
         <widget class="QPushButton" name="server_status">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Status serwera</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="stop_server">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Zatrzymaj serwer</string>
          </property>
         </widget>
        </item>
@@ -1379,7 +1392,7 @@ QDateEdit::down-arrow:focus {
      <x>0</x>
      <y>0</y>
      <width>624</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSerwer_Data">
