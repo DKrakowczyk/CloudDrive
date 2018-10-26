@@ -18,6 +18,7 @@ public:
     void deleteRow(QString);
     void changeData(QString,QString,QString);
     QString getId(QString,QString);
+    void addUser(QString, QString);
 };
 
 #endif // BAZADANYCH_H

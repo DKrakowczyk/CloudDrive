@@ -36,6 +36,14 @@ void BazaDanych::deleteRow(QString row){
     query->exec();
 }
 
+void BazaDanych::addUser(QString login, QString password)
+{
+    QSqlQuery * query = new QSqlQuery(mydb);
+    query->prepare("INSERT INTO users(id,login,password) VALUES(:log,:pass)");
+    query->bindValue(":log", login);
+    query->bindValue(":pass", password);
+    query->exec();
+}
 QString BazaDanych::getId(QString login, QString password)
 {
     QSqlQuery * query = new QSqlQuery(mydb);

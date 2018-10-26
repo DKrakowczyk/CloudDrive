@@ -38,27 +38,34 @@ void serwer::chooseAction(QByteArray data)
 {
     QByteArray analyze = data;
     QList<QByteArray> dane = analyze.split('|');
+    QString check = dane.takeAt(0);
+    BazaDanych* baza = new BazaDanych("QSQLITE", ui->dbPath->text());
 
-        if (dane.takeAt(0) == "log")
+        if (check == "log")
         {
             QByteArray login = dane.takeAt(0);
             QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
+
+        }
+        else if(check == "reg")
+        {
+                QString login = dane.takeAt(0);
+                QString password = dane.takeAt(0);
                 if (login != "" && password != "")
                 {
-                    BazaDanych* baza = new BazaDanych("QSQLITE", ui->dbPath->text());
-                    share_data(data);
-                    qDebug() << "wyrazenie" + baza->getId(login, password);
+                    qDebug()<<"login:"+login+"password"+password;
+                    QByteArray response;
+                    response.append("reg|"+login+"|"+password);
+                    baza->addUser(login,password);
+                    share_data(response);
+
                 }
-        }
-        else if(dane.takeAt(0) == "reg")
+         }
+        else if(check== "send")
         {
 
         }
-        else if(dane.takeAt(0)== "send")
-        {
-
-        }
-        else if(dane.takeAt(0)=="get")
+        else if(check=="get")
         {
 
         }
@@ -168,7 +175,6 @@ void serwer::show_server()
 void serwer::on_actionLista_u_ytkownik_w_triggered()
 {
     userList = new UserList(this);
-
     connect(userList, SIGNAL(closeWindow()), this, SLOT(showMainWindow()));
     ui->centralWidget->hide();
     userList->show();
