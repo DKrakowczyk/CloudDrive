@@ -45,6 +45,12 @@ void serwer::chooseAction(QByteArray data)
         {
             QByteArray login = dane.takeAt(0);
             QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
+            qDebug()<<"login:"+login+"password"+password;
+            if(baza->userExist(login,password)){
+                share_data("log|1");
+            } else {
+                share_data("log|0");
+            }
 
         }
         else if(check == "reg")

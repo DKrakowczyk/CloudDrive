@@ -29,9 +29,8 @@ QSqlQueryModel * BazaDanych::getData(QString q){
 }
 
 void BazaDanych::deleteRow(QString row){
-    QSqlQueryModel *  model = new QSqlQueryModel();
     QSqlQuery * query = new QSqlQuery(mydb);
-    query->prepare("delete from users where id = :row");
+    query->prepare("delete from users where login = :row");
     query->bindValue(":row", row);
     query->exec();
 }
@@ -39,31 +38,27 @@ void BazaDanych::deleteRow(QString row){
 void BazaDanych::addUser(QString login, QString password)
 {
     QSqlQuery * query = new QSqlQuery(mydb);
-    query->prepare("INSERT INTO users(id,login,password) VALUES(:log,:pass)");
+    query->prepare("INSERT INTO users(login,password) VALUES(:log,:pass)");
     query->bindValue(":log", login);
     query->bindValue(":pass", password);
     query->exec();
 }
-QString BazaDanych::getId(QString login, QString password)
+bool BazaDanych::userExist(QString login, QString password)
 {
+    QSqlQueryModel *  model = new QSqlQueryModel();
     QSqlQuery * query = new QSqlQuery(mydb);
     query->prepare("SELECT login FROM users WHERE login = :log AND password= :pass");
     query->bindValue(":log", login);
     query->bindValue(":pass", password);
     query->exec();
-    QString a;
-    if(query->isActive())
-    {
-        while(query->next())
-        {
-        a = query->value(0).toString();
-        }
-    }
-    return a;
+    model->setQuery(*query);
+    if(  model->data(model->index(0,0)).toString() == "") return false;
+    else return true;
+
 }
 void BazaDanych::changeData(QString row,QString log, QString pass){
     QSqlQuery * query = new QSqlQuery(mydb);
-    query->prepare("update users set login = :log, password= :pass where id = :row");
+    query->prepare("update users set login = :log, password= :pass where login = :row");
     query->bindValue(":row", row);
     query->bindValue(":log", log);
     query->bindValue(":pass", pass);

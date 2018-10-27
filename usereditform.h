@@ -13,7 +13,7 @@ class userEditForm : public QWidget
 public:
     explicit userEditForm(QWidget *parent = nullptr);
     ~userEditForm();
-    void setFields(QString,QString,QString);
+    void setFields(QString,QString);
     QString getLogin();
     QString getpassword();
 private slots:
@@ -25,7 +25,7 @@ private slots:
 
 private:
     Ui::userEditForm *ui;
-    QString id,login,password;
+    QString login,password;
     void setLabels();
 
 signals:

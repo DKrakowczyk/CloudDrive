@@ -14,15 +14,13 @@ userEditForm::~userEditForm()
     delete ui;
 }
 
-void userEditForm::setFields(QString _id,QString _login,QString _password){
-    this->id = _id;
+void userEditForm::setFields(QString _login,QString _password){
     this->login = _login;
     this->password = _password;
     setLabels();
 }
 
 void userEditForm::setLabels(){
-    ui->labelUserId->setText("numer ID: "+id);
     ui->textLogin->setPlainText(login);
     ui->textPassword->setPlainText(password);
 

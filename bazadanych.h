@@ -17,7 +17,7 @@ public:
     QSqlQueryModel * getData(QString);
     void deleteRow(QString);
     void changeData(QString,QString,QString);
-    QString getId(QString,QString);
+    bool userExist(QString,QString);
     void addUser(QString, QString);
 };
 

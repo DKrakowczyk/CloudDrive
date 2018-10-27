@@ -1273,7 +1273,7 @@ QDateEdit::down-arrow:focus {
 }
 </string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -1283,13 +1283,6 @@ QDateEdit::down-arrow:focus {
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="labelUserId">
-      <property name="text">
-       <string>Numer ID:</string>
-      </property>
-     </widget>
-    </item>
     <item>
      <spacer name="verticalSpacer_3">
       <property name="orientation">
