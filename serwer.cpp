@@ -127,12 +127,23 @@ QByteArray serwer::shareFileNames(QString login)
     }
     return response;
 }
+QByteArray IntToArray(qint32 source) //Use qint32 to ensure that the number have 4 bytes
+{
+    //Avoid use of cast, this is the Qt way to serialize objects
+    QByteArray temp;
+    QDataStream data(&temp, QIODevice::ReadWrite);
+    data << source;
+    return temp;
+}
 void serwer::share_data(QByteArray response)
 {
     QTcpSocket *user = (QTcpSocket*)sender();
-    QByteArray block;
-    block.append(response);
-    user->write(block);
+//    QByteArray block;
+//    block.append(response);
+//    user->write(block);
+    user->write(IntToArray(response.size()));
+    user->write(response);
+    user->waitForBytesWritten();
 }
 //----------------------------------SERWER----------------------------------
 void serwer::newServerConnection()
@@ -219,6 +230,7 @@ qint32 ArrayToInt(QByteArray source)
     data >> temp;
     return temp;
 }
+
 void serwer::show_server()
 {
     QMessageBox::information(this, tr("Komunikat serwera danych"),
