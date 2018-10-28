@@ -52,6 +52,7 @@ bool BazaDanych::userExist(QString login, QString password)
     query->bindValue(":pass", password);
     query->exec();
     model->setQuery(*query);
+   mydb.close();
     if(  model->data(model->index(0,0)).toString() == "") return false;
     else return true;
 

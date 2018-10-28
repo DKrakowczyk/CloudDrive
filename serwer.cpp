@@ -41,8 +41,8 @@ void serwer::chooseAction(QByteArray data)
         {
             QByteArray login = dane.takeAt(0);
             QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
-            bool status = baza->userExist(login,password);
-            if(status == true){
+
+            if(baza->userExist(login,password)){
                 share_data("log|success|"+login+"|"+shareFileNames(login)+"|");
 
             } else {
@@ -96,9 +96,26 @@ void serwer::chooseAction(QByteArray data)
         }
         else if(check=="get")
         {
+            QString login = dane.takeAt(0);
+            QString filename = dane.takeAt(0);
+            QByteArray buffer;
+            QFile *file = new QFile(QDir::currentPath()+"/"+login+"/"+filename);
+            if (!file->open(QIODevice::ReadOnly))
+            {
+                    qDebug() << "Error, nie ma takiego pliku";
+            }
+            else
+            {
+                buffer = file->readAll(); //w zmiennej buffer zapisany plik
 
+                QByteArray fileToSend;
+                fileToSend.append("get|"+login+"|"+filename+"|"); //get|login|filename
+                fileToSend.append(buffer); //dodanie pliku
+                share_data(fileToSend);
+                file->close();
         }
-}
+        delete baza;
+}}
 QByteArray serwer::shareFileNames(QString login)
 {
     QDir directory(login);
