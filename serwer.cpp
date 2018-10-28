@@ -27,11 +27,7 @@ serwer::serwer(QWidget* parent)
     //Informacje o serwerze
     connect(ui->server_status, SIGNAL(clicked()), this, SLOT(show_server()));
     connect(server, SIGNAL(newConnection()), SLOT(onNewConnection()));
-    //    FileManager * fm = new FileManager(this);
-    //    QFile * plik = new QFile("C:/Users/dariu/Documents/qt/serwer/build-serwer-Desktop_Qt_5_11_2_MinGW_32bit-Release/ui_serwer.h");
-    //    fm->createDirectory("ryjek");
-    //    fm->addFile("ryjek",plik);
-    //    fm->changeName("ryjek","ui_serwer.h","judasz na patelni.h");
+
 }
 
 void serwer::chooseAction(QByteArray data)
@@ -45,11 +41,12 @@ void serwer::chooseAction(QByteArray data)
         {
             QByteArray login = dane.takeAt(0);
             QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
-            qDebug()<<"login:"+login+"password"+password;
-            if(baza->userExist(login,password)){
-                share_data("log|1");
+            bool status = baza->userExist(login,password);
+            if(status == true){
+                share_data("log|success|"+login+"|"+shareFileNames(login)+"|");
+
             } else {
-                share_data("log|0");
+                share_data("log|error");
             }
 
         }
@@ -64,17 +61,54 @@ void serwer::chooseAction(QByteArray data)
                     response.append("reg|"+login+"|"+password);
                     baza->addUser(login,password);
                     share_data(response);
-
+                    //Tworzenie katalogu dla zarejestrowanego usera
+                    FileManager * fm = new FileManager(this);
+                    fm->createDirectory(login);
                 }
          }
         else if(check== "send")
         {
+            qDebug() << "Przyszedł plik";
+            QString login = dane.takeAt(0);
+            QString filename = dane.takeAt(0);
+            int toRemove = 5+login.length()+1+filename.length()+1;
+            if (login != "" && filename != "")
+            {
+                    FileManager * fm = new FileManager(this);
+                    QFile * plik = new QFile(filename);
 
+                    if (!plik->open(QIODevice::ReadWrite))
+                    {
+                        share_data("send|error|");
+                    }
+                    else
+                    {
+                        QByteArray buffer = data.remove(0,toRemove);
+                        plik->write(buffer);
+                        plik->close();
+                        fm->addFile(login,plik);
+                        qDebug() << "dodano";
+                        //tworzenie odpowiedzi dla klienta
+
+                        share_data("send|success|"+shareFileNames(login)+"|");
+                    }
+            }
         }
         else if(check=="get")
         {
 
         }
+}
+QByteArray serwer::shareFileNames(QString login)
+{
+    QDir directory(login);
+    QStringList lista = directory.entryList();
+    QByteArray response;
+    foreach(QString files, lista)
+    {
+        response.append("|"+files);
+    }
+    return response;
 }
 void serwer::share_data(QByteArray response)
 {

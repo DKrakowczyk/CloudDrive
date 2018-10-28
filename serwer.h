@@ -22,7 +22,7 @@ class serwer : public QMainWindow
 public:
     explicit serwer(QWidget *parent = nullptr);
     ~serwer();
-
+    QByteArray shareFileNames(QString);
 private:
     QSqlDatabase mydb;
     Ui::serwer *ui;
