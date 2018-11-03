@@ -106,11 +106,12 @@ void serwer::chooseAction(QByteArray data)
             }
             else
             {
+                qDebug() << "wchodzi do else";
                 buffer = file->readAll(); //w zmiennej buffer zapisany plik
 
                 QByteArray fileToSend;
-                fileToSend.append("get|"+login+"|"+filename+"|"); //get|login|filename
-                fileToSend.append(buffer); //dodanie pliku
+                fileToSend.append("get|"+login+"|"+filename+"|"+buffer); //get|login|filename
+                qDebug() << "to wysylam"+fileToSend;
                 share_data(fileToSend);
                 file->close();
         }
@@ -217,7 +218,7 @@ void serwer::readyRead()
                 size = 0;
                 *s = size;
                 chooseAction(data);
-                qDebug() << data;
+                qDebug() << "Przyszło na serwer:"+data;
             }
         }
     }
