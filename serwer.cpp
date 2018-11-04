@@ -108,11 +108,7 @@ void serwer::chooseAction(QByteArray data)
             }
             else
             {
-                QDataStream dataStream(file);
-
-                qDebug()<< file->bytesAvailable();
-                dataStream << file->readAll();
-                dataStream >> buffer; //w zmiennej buffer zapisany plik
+                buffer = file->readAll();
                 QByteArray fileToSend;
                 fileToSend.append("get|"+login+"|"+filename+"|"); //send|login|filename
                 fileToSend.append(buffer); //dodanie pliku
