@@ -99,24 +99,43 @@ void serwer::chooseAction(QByteArray data)
             QString login = dane.takeAt(0);
             QString filename = dane.takeAt(0);
             QByteArray buffer;
-            QFile *file = new QFile(QDir::currentPath()+"/"+login+"/"+filename);
+            QString filePath = QDir::currentPath()+"/"+login+"/"+filename;
+            QFile *file = new QFile(filePath);
             if (!file->open(QIODevice::ReadOnly))
             {
-                    qDebug() << "Error, nie ma takiego pliku";
+                QMessageBox::information(this, tr("Komunikat aplikacji klienckiej"),
+                tr("Błąd poczas otwierania pliku"));
             }
             else
             {
-                qDebug() << "wchodzi do else";
-                buffer = file->readAll(); //w zmiennej buffer zapisany plik
+                QDataStream dataStream(file);
 
+                qDebug()<< file->bytesAvailable();
+                dataStream << file->readAll();
+                dataStream >> buffer; //w zmiennej buffer zapisany plik
                 QByteArray fileToSend;
-                fileToSend.append("get|"+login+"|"+filename+"|"+buffer); //get|login|filename
-                qDebug() << "to wysylam"+fileToSend;
-                share_data(fileToSend);
+                fileToSend.append("get|"+login+"|"+filename+"|"); //send|login|filename
+                fileToSend.append(buffer); //dodanie pliku
                 file->close();
+                share_data(fileToSend);
+
+            }
         }
-        delete baza;
-}}
+        else if(check=="del")
+        {
+            QString login = dane.takeAt(0);
+            QString filename = dane.takeAt(0);
+            if (login != "" && filename != "")
+            {
+                FileManager * fm = new FileManager(this);
+                fm->removeFile(login,filename);
+                share_data("send|deleted|"+shareFileNames(login)+"|");
+                qDebug() << "skasowano plik"+filename;
+            }
+
+        }
+
+}
 QByteArray serwer::shareFileNames(QString login)
 {
     QDir directory(login);
