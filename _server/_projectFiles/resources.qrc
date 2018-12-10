@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/db">
-        <file>baza1.db</file>
         <file>db.png</file>
         <file>refresh.png</file>
     </qresource>
