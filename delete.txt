@@ -1,0 +1,10 @@
+ Volume in drive C is Windows
+ Volume Serial Number is 28A6-2346
+
+ Directory of C:\Users\Dawid\Documents\cloudcpp
+
+10.12.2018  23:18    <DIR>          .
+10.12.2018  23:18    <DIR>          ..
+10.12.2018  23:18                 0 delete.txt
+               1 File(s)              0 bytes
+               2 Dir(s)  339ÿ375ÿ824ÿ896 bytes free
