@@ -1326,14 +1326,14 @@ QDateEdit::down-arrow:focus {
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="registerButton">
         <property name="text">
          <string>Zarejestruj</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="closeButton">
         <property name="text">
          <string>Zamknij</string>
         </property>

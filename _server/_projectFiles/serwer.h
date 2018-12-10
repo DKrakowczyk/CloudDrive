@@ -18,7 +18,6 @@ class serwer;
 class serwer : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit serwer(QWidget *parent = nullptr);
     ~serwer();
@@ -26,13 +25,12 @@ public:
 private:
     QSqlDatabase mydb;
     Ui::serwer *ui;
-    QTcpServer  *server;
+    QTcpServer *server;
     QStringList dane;
     QString time;
-    UserList * userList;
+    UserList *userList;
     QString dbPath;
-    //--Pobieranie plików--
-    QHash<QTcpSocket*, QByteArray*> buffers; //bufor do przetrzymywania danych az dojda cale
+    QHash<QTcpSocket*, QByteArray*> buffers;
     QHash<QTcpSocket*, qint32*> sizes;
 public slots:
     void showMainWindow();
@@ -44,7 +42,6 @@ private slots:
     void show_server();
     void on_actionLista_u_ytkownik_w_triggered();
     void on_button_addDb_clicked();
-
     void newServerConnection();
     void disconnected();
     void readyRead();

@@ -11,7 +11,6 @@ class UserList;
 class UserList : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit UserList(QWidget *parent = nullptr);
     void setDbPath();

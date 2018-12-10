@@ -16,12 +16,7 @@ public:
     void removeFile(QString,QString);
     void changeName(QString,QString,QString);
 private:
-QDir directory;
-
-
-signals:
-
-public slots:
+    QDir directory;
 };
 
 #endif // FILEMANAGER_H

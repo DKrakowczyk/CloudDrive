@@ -15,12 +15,12 @@ userRegister::~userRegister()
     delete ui;
 }
 
-void userRegister::on_pushButton_2_clicked()
+void userRegister::on_closeButton_clicked()
 {
     this->close();
 }
 
-void userRegister::on_pushButton_clicked()
+void userRegister::on_registerButton_clicked()
 {
     QString password = ui->userPassword->text();
     QString hashed = QString(QCryptographicHash::hash((password.toUtf8()),QCryptographicHash::Md5).toHex());
