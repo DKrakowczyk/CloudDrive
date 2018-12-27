@@ -1299,7 +1299,7 @@ QDateEdit::down-arrow:focus {
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>LISTA PLIKÓW NA SERWERZE: </string>
+       <string>LIST OF FILES ON THE SERVER:</string>
       </property>
      </widget>
     </item>
@@ -1309,14 +1309,14 @@ QDateEdit::down-arrow:focus {
     <item>
      <widget class="QPushButton" name="downloadButton">
       <property name="text">
-       <string>Pobierz wybrany plik</string>
+       <string>Download the selected file</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="addFileButton">
       <property name="text">
-       <string>Dodaj Plik</string>
+       <string>Add file</string>
       </property>
      </widget>
     </item>
@@ -2585,7 +2585,7 @@ QDateEdit::down-arrow:focus {
 </string>
         </property>
         <property name="text">
-         <string>Wyloguj</string>
+         <string>Log out</string>
         </property>
        </widget>
       </item>

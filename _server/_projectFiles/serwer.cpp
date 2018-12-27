@@ -27,7 +27,6 @@ serwer::serwer(QWidget* parent)
     //Informacje o serwerze
     connect(ui->server_status, SIGNAL(clicked()), this, SLOT(show_server()));
     connect(server, SIGNAL(newConnection()), SLOT(onNewConnection()));
-
 }
 
 void serwer::chooseAction(QByteArray data)
@@ -37,109 +36,92 @@ void serwer::chooseAction(QByteArray data)
     QString check = dane.takeAt(0);
     BazaDanych* baza = new BazaDanych("QSQLITE", ui->dbPath->text());
 
-        if (check == "log")
-        {
-            QByteArray login = dane.takeAt(0);
-            QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
+    if (check == "log") {
+        QByteArray login = dane.takeAt(0);
+        QByteArray password = dane.takeAt(0); //poprzednie wywolanie wyciaga QByteArray i ten staje sie 1
 
-            if(baza->userExist(login,password)){
-                share_data("log|success|"+login+"|"+shareFileNames(login)+"|");
-
-            } else {
-                share_data("log|error");
-            }
-
+        if (baza->userExist(login, password)) {
+            share_data("log|success|" + login + "|" + shareFileNames(login) + "|");
         }
-        else if(check == "reg")
-        {
-                QString login = dane.takeAt(0);
-                QString password = dane.takeAt(0);
-                if (login != "" && password != "")
-                {
-                    qDebug()<<"login:"+login+"password"+password;
-                    QByteArray response;
-                    response.append("reg|"+login+"|"+password);
-                    baza->addUser(login,password);
-                    share_data(response);
-                    //Tworzenie katalogu dla zarejestrowanego usera
-                    FileManager * fm = new FileManager(this);
-                    fm->createDirectory(login);
-                }
-         }
-        else if(check== "send")
-        {
-            qDebug() << "Przyszedł plik";
-            QString login = dane.takeAt(0);
-            QString filename = dane.takeAt(0);
-            int toRemove = 5+login.length()+1+filename.length()+1;
-            if (login != "" && filename != "")
-            {
-                    FileManager * fm = new FileManager(this);
-                    QFile * plik = new QFile(filename);
+        else {
+            share_data("log|error");
+        }
+    }
+    else if (check == "reg") {
+        QString login = dane.takeAt(0);
+        QString password = dane.takeAt(0);
+        if (login != "" && password != "") {
+            qDebug() << "login:" + login + "password" + password;
+            QByteArray response;
+            response.append("reg|" + login + "|" + password);
+            baza->addUser(login, password);
+            share_data(response);
+            //Tworzenie katalogu dla zarejestrowanego usera
+            FileManager* fm = new FileManager(this);
+            fm->createDirectory(login);
+        }
+    }
+    else if (check == "send") {
+        qDebug() << "Przyszedł plik";
+        QString login = dane.takeAt(0);
+        QString filename = dane.takeAt(0);
+        int toRemove = 5 + login.length() + 1 + filename.length() + 1;
+        if (login != "" && filename != "") {
+            FileManager* fm = new FileManager(this);
+            QFile* plik = new QFile(filename);
 
-                    if (!plik->open(QIODevice::ReadWrite))
-                    {
-                        share_data("send|error|");
-                    }
-                    else
-                    {
-                        QByteArray buffer = data.remove(0,toRemove);
-                        plik->write(buffer);
-                        plik->close();
-                        fm->addFile(login,plik);
-                        qDebug() << "dodano";
-                        //tworzenie odpowiedzi dla klienta
+            if (!plik->open(QIODevice::ReadWrite)) {
+                share_data("send|error|");
+            }
+            else {
+                QByteArray buffer = data.remove(0, toRemove);
+                plik->write(buffer);
+                plik->close();
+                fm->addFile(login, plik);
+                qDebug() << "dodano";
+                //tworzenie odpowiedzi dla klienta
 
-                        share_data("send|success|"+shareFileNames(login)+"|");
-                    }
+                share_data("send|success|" + shareFileNames(login) + "|");
             }
         }
-        else if(check=="get")
-        {
-            QString login = dane.takeAt(0);
-            QString filename = dane.takeAt(0);
-            QByteArray buffer;
-            QString filePath = QDir::currentPath()+"/"+login+"/"+filename;
-            QFile *file = new QFile(filePath);
-            if (!file->open(QIODevice::ReadOnly))
-            {
-                QMessageBox::information(this, tr("Komunikat aplikacji klienckiej"),
-                tr("Błąd poczas otwierania pliku"));
-            }
-            else
-            {
-                buffer = file->readAll();
-                QByteArray fileToSend;
-                fileToSend.append("get|"+login+"|"+filename+"|"); //send|login|filename
-                fileToSend.append(buffer); //dodanie pliku
-                file->close();
-                share_data(fileToSend);
-
-            }
+    }
+    else if (check == "get") {
+        QString login = dane.takeAt(0);
+        QString filename = dane.takeAt(0);
+        QByteArray buffer;
+        QString filePath = QDir::currentPath() + "/" + login + "/" + filename;
+        QFile* file = new QFile(filePath);
+        if (!file->open(QIODevice::ReadOnly)) {
+            QMessageBox::information(this, tr("Komunikat aplikacji klienckiej"),
+                tr("Cannot open the file"));
         }
-        else if(check=="del")
-        {
-            QString login = dane.takeAt(0);
-            QString filename = dane.takeAt(0);
-            if (login != "" && filename != "")
-            {
-                FileManager * fm = new FileManager(this);
-                fm->removeFile(login,filename);
-                share_data("send|deleted|"+shareFileNames(login)+"|");
-                qDebug() << "skasowano plik"+filename;
-            }
-
+        else {
+            buffer = file->readAll();
+            QByteArray fileToSend;
+            fileToSend.append("get|" + login + "|" + filename + "|"); //send|login|filename
+            fileToSend.append(buffer); //dodanie pliku
+            file->close();
+            share_data(fileToSend);
         }
-
+    }
+    else if (check == "del") {
+        QString login = dane.takeAt(0);
+        QString filename = dane.takeAt(0);
+        if (login != "" && filename != "") {
+            FileManager* fm = new FileManager(this);
+            fm->removeFile(login, filename);
+            share_data("send|deleted|" + shareFileNames(login) + "|");
+            qDebug() << "skasowano plik" + filename;
+        }
+    }
 }
 QByteArray serwer::shareFileNames(QString login)
 {
     QDir directory(login);
     QStringList lista = directory.entryList();
     QByteArray response;
-    foreach(QString files, lista)
-    {
-        response.append("|"+files);
+    foreach (QString files, lista) {
+        response.append("|" + files);
     }
     return response;
 }
@@ -153,10 +135,7 @@ QByteArray IntToArray(qint32 source) //Use qint32 to ensure that the number have
 }
 void serwer::share_data(QByteArray response)
 {
-    QTcpSocket *user = (QTcpSocket*)sender();
-//    QByteArray block;
-//    block.append(response);
-//    user->write(block);
+    QTcpSocket* user = (QTcpSocket*)sender();
     user->write(IntToArray(response.size()));
     user->write(response);
     user->waitForBytesWritten();
@@ -166,13 +145,13 @@ void serwer::newServerConnection()
 {
 
     if (!server->listen((QHostAddress)ui->server_name_field->text(), ui->server_port->text().toInt())) {
-        QMessageBox::critical(this, tr("Komunikat serwera danych"),
-            tr("Nie udało się uruchomić usługi: %1.")
+        QMessageBox::critical(this, tr("Data server message"),
+            tr("The service could not be started: %1.")
                 .arg(server->errorString()));
     }
     else {
-        QMessageBox::information(this, tr("Komunikat serwera danych"),
-            tr("Serwer uruchomiony: %1.")
+        QMessageBox::information(this, tr("Data server message"),
+            tr("Server is running: %1.")
                 .arg(ui->server_name_field->text()));
 
         //Kontrola inputow
@@ -202,9 +181,9 @@ void serwer::onNewConnection()
 
 void serwer::disconnected()
 {
-    QTcpSocket *socket = static_cast<QTcpSocket*>(sender());
-    QByteArray *buffer = buffers.value(socket);
-    qint32 *s = sizes.value(socket);
+    QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
+    QByteArray* buffer = buffers.value(socket);
+    qint32* s = sizes.value(socket);
     socket->deleteLater();
     delete buffer;
     delete s;
@@ -233,11 +212,9 @@ void serwer::readyRead()
                 size = 0;
                 *s = size;
                 chooseAction(data);
-                qDebug() << "Przyszło na serwer:"+data;
             }
         }
     }
-
 }
 qint32 ArrayToInt(QByteArray source)
 {
@@ -249,8 +226,8 @@ qint32 ArrayToInt(QByteArray source)
 
 void serwer::show_server()
 {
-    QMessageBox::information(this, tr("Komunikat serwera danych"),
-        tr("Nazwa serwera: %1\nPort: %2\nCzas uruchomienia: %3\n")
+    QMessageBox::information(this, tr("Data server message"),
+        tr("Server name: %1\nPort: %2\nStart time: %3\n")
             .arg(ui->server_name_field->text())
             .arg(ui->server_port->text())
             .arg(time));
@@ -269,20 +246,20 @@ void serwer::on_button_addDb_clicked()
 {
     dbPath = QFileDialog::getOpenFileName(
         this,
-        tr("Wybierz Bazę danych"),
+        tr("Choose database..."),
         "../",
         "Pliki Bazy SQLITE (*.db)");
 
     ui->dbPath->setText(dbPath);
     set_con_str(ui->dbPath->text());
-    ui->serwer_info->setText("Dane zostaną zapisane..");
+    ui->serwer_info->setText("All changes will be saved..");
 }
 void serwer::on_stop_server_clicked()
 {
     server->close();
     if (!server->isListening()) {
-        QMessageBox::information(this, tr("Komunikat serwera danych"),
-            tr("Serwer zatrzymany: %1.")
+        QMessageBox::information(this, tr("Data server message"),
+            tr("Server stopped: %1.")
                 .arg(ui->server_name_field->text()));
     }
     //Kontrola inputow
@@ -302,7 +279,7 @@ void serwer::set_con_str(QString str)
     file.setFileName("con_string.txt");
 
     if (file.open(QIODevice::WriteOnly)) {
-        QMessageBox::information(this, tr("Komunikat serwera"), tr("Pomyślnie zapisano ścieżkę bazy danych"));
+        QMessageBox::information(this, tr("Data server message"), tr("The database path has been successfully saved"));
         QTextStream stream(&file);
         stream << str;
     }
@@ -320,13 +297,13 @@ void serwer::db_placeholder()
 
         if (placeholder != "") {
             ui->dbPath->setText(placeholder);
-            ui->serwer_info->setText("Pomyślnie wczytano konfigurację!");
+            ui->serwer_info->setText("Configuration has been successfully loaded!");
             QPixmap pic(":/db/db.png");
             ui->db_image->setPixmap(pic);
         }
         else {
-            ui->dbPath->setText("Wybierz bazę danych...");
-            ui->serwer_info->setText("Skonfiguruj serwer..");
+            ui->dbPath->setText("Choose a database ...");
+            ui->serwer_info->setText("Configure the server..");
             QPixmap pic(":/db/refresh.png");
             ui->db_image->setPixmap(pic);
         }
@@ -343,4 +320,3 @@ serwer::~serwer()
 {
     delete ui;
 }
-

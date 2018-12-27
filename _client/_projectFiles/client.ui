@@ -1295,7 +1295,7 @@ QDateEdit::down-arrow:focus {
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Nazwa serwera: </string>
+          <string>Server address: </string>
          </property>
         </widget>
        </item>
@@ -1336,7 +1336,7 @@ QDateEdit::down-arrow:focus {
        <item>
         <widget class="QPushButton" name="connectTo">
          <property name="text">
-          <string>Połącz</string>
+          <string>Connect</string>
          </property>
         </widget>
        </item>
@@ -1354,21 +1354,21 @@ QDateEdit::down-arrow:focus {
        <item>
         <widget class="QPushButton" name="Register">
          <property name="text">
-          <string>Zarejestruj się</string>
+          <string>Sign up</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="logIn">
          <property name="text">
-          <string>Zaloguj się</string>
+          <string>Log in</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="disconnectClient">
          <property name="text">
-          <string>Rozłącz</string>
+          <string>Disconnect</string>
          </property>
         </widget>
        </item>
@@ -1401,7 +1401,7 @@ QDateEdit::down-arrow:focus {
    </property>
    <widget class="QMenu" name="menuKlient">
     <property name="title">
-     <string>Klient</string>
+     <string>Client</string>
     </property>
    </widget>
    <addaction name="menuKlient"/>

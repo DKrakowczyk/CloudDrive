@@ -1367,7 +1367,7 @@ QDateEdit::down-arrow:focus {
       <item>
        <widget class="QLabel" name="labelUserPassword">
         <property name="text">
-         <string>Hasło:</string>
+         <string>Password</string>
         </property>
        </widget>
       </item>
@@ -1417,7 +1417,7 @@ QDateEdit::down-arrow:focus {
          <string notr="true">background-color: rgb(0, 173, 43);</string>
         </property>
         <property name="text">
-         <string>Zatwierdź</string>
+         <string>Confirm</string>
         </property>
        </widget>
       </item>
@@ -1427,14 +1427,14 @@ QDateEdit::down-arrow:focus {
          <string notr="true">background-color: rgb(255, 61, 64);</string>
         </property>
         <property name="text">
-         <string>Usuń</string>
+         <string>Delete</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="buttonReject">
         <property name="text">
-         <string>Anuluj</string>
+         <string>Close</string>
         </property>
        </widget>
       </item>

@@ -1,35 +1,42 @@
 #include "bazadanych.h"
 
-BazaDanych::BazaDanych(QString type,QString path):dbType(type),pathToDbFile(path)
+BazaDanych::BazaDanych(QString type, QString path)
+    : dbType(type)
+    , pathToDbFile(path)
 {
-startDb();
+    startDb();
 }
 
-void BazaDanych::startDb(){
+void BazaDanych::startDb()
+{
     mydb = QSqlDatabase::addDatabase(dbType);
     mydb.setDatabaseName(pathToDbFile);
-    if(!mydb.open()){
-       status = "błąd połączenia z bazą danych...";
-    } else{
-       status = "Połączono z bazą danych!";
+    if (!mydb.open()) {
+        status = "Cannot connect to database...";
+    }
+    else {
+        status = "Connected to database!";
     }
 }
 
-QString BazaDanych::getStatus(){
+QString BazaDanych::getStatus()
+{
     return status;
 }
 
-QSqlQueryModel * BazaDanych::getData(QString q){
-        QSqlQueryModel *  model = new QSqlQueryModel();
-        QSqlQuery * query = new QSqlQuery(mydb);
-        query->prepare(q);
-        query->exec();
-        model->setQuery(*query);
-        return model;
+QSqlQueryModel* BazaDanych::getData(QString q)
+{
+    QSqlQueryModel* model = new QSqlQueryModel();
+    QSqlQuery* query = new QSqlQuery(mydb);
+    query->prepare(q);
+    query->exec();
+    model->setQuery(*query);
+    return model;
 }
 
-void BazaDanych::deleteRow(QString row){
-    QSqlQuery * query = new QSqlQuery(mydb);
+void BazaDanych::deleteRow(QString row)
+{
+    QSqlQuery* query = new QSqlQuery(mydb);
     query->prepare("delete from users where login = :row");
     query->bindValue(":row", row);
     query->exec();
@@ -37,7 +44,7 @@ void BazaDanych::deleteRow(QString row){
 
 void BazaDanych::addUser(QString login, QString password)
 {
-    QSqlQuery * query = new QSqlQuery(mydb);
+    QSqlQuery* query = new QSqlQuery(mydb);
     query->prepare("INSERT INTO users(login,password) VALUES(:log,:pass)");
     query->bindValue(":log", login);
     query->bindValue(":pass", password);
@@ -45,20 +52,22 @@ void BazaDanych::addUser(QString login, QString password)
 }
 bool BazaDanych::userExist(QString login, QString password)
 {
-    QSqlQueryModel *  model = new QSqlQueryModel();
-    QSqlQuery * query = new QSqlQuery(mydb);
+    QSqlQueryModel* model = new QSqlQueryModel();
+    QSqlQuery* query = new QSqlQuery(mydb);
     query->prepare("SELECT login FROM users WHERE login = :log AND password= :pass");
     query->bindValue(":log", login);
     query->bindValue(":pass", password);
     query->exec();
     model->setQuery(*query);
-   mydb.close();
-    if(  model->data(model->index(0,0)).toString() == "") return false;
-    else return true;
-
+    mydb.close();
+    if (model->data(model->index(0, 0)).toString() == "")
+        return false;
+    else
+        return true;
 }
-void BazaDanych::changeData(QString row,QString log, QString pass){
-    QSqlQuery * query = new QSqlQuery(mydb);
+void BazaDanych::changeData(QString row, QString log, QString pass)
+{
+    QSqlQuery* query = new QSqlQuery(mydb);
     query->prepare("update users set login = :log, password= :pass where login = :row");
     query->bindValue(":row", row);
     query->bindValue(":log", log);
@@ -66,8 +75,7 @@ void BazaDanych::changeData(QString row,QString log, QString pass){
     query->exec();
 }
 
-
-BazaDanych::~BazaDanych(){
+BazaDanych::~BazaDanych()
+{
     mydb.close();
 }
-

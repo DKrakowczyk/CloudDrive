@@ -1314,7 +1314,7 @@ QDateEdit::down-arrow:focus {
       <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Hasło: </string>
+         <string>Password: </string>
         </property>
        </widget>
       </item>
@@ -2582,14 +2582,14 @@ QDateEdit::down-arrow:focus {
 </string>
         </property>
         <property name="text">
-         <string>Zaloguj</string>
+         <string>Log in</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="closeButton">
         <property name="text">
-         <string>Zamknij</string>
+         <string>Close</string>
         </property>
        </widget>
       </item>

@@ -30,9 +30,8 @@ bool client::connectToServer()
     socket->connectToHost(ui->serverName->text(), ui->server_port->text().toInt(), QIODevice::ReadWrite);
 
     if (socket->waitForConnected()) {
-        QMessageBox::information(this, tr("Komunikat aplikacji klienckiej"),
-            tr("Połączono "));
-
+        QMessageBox::information(this, tr("Message of the client application"),
+            tr("Connected!"));
     }
     return 1;
 }
@@ -60,8 +59,6 @@ void client::process()
 }
 void client::getResponseFromServer()
 {
-    //ZOBACZYMY CZY DZIALA
-
     process();
 
     QByteArray* buffer = buffers.value(socket);
@@ -84,107 +81,83 @@ void client::getResponseFromServer()
                 size = 0;
                 *s = size;
 
-                qDebug() << data;
-
-
                 QList<QByteArray> dane = data.split('|');
                 QString check = dane.takeAt(0);
 
-
-                if (check == "log")
-                {
+                if (check == "log") {
                     QString response = dane.takeAt(0);
-                    if(response == "success")
-                    {
+                    if (response == "success") {
                         fileList = new FileList(this);
                         loginForm->close();
                         fileList->show();
                         logUser = dane.takeAt(0);
-                        QString trash = dane.takeAt(0);//------------------------------------------------
-                        QString trash2 = dane.takeAt(0);//-ZMIENNE USUWAJĄCE ZŁE ODP Z SERWERA-----------
-                        QString trash3 = dane.takeAt(0);//-----------------------------------------------
-                         fileList->updateAll(dane);
+                        QString trash = dane.takeAt(0); //------------------------------------------------
+                        QString trash2 = dane.takeAt(0); //-ZMIENNE USUWAJĄCE ZŁE ODP Z SERWERA-----------
+                        QString trash3 = dane.takeAt(0); //-----------------------------------------------
+                        fileList->updateAll(dane);
                         fileList->setLogin(logUser);
                         connect(fileList, SIGNAL(sendFile(QByteArray)), this, SLOT(sendFileToServer(QByteArray)));
                         connect(fileList, SIGNAL(getFile(QByteArray)), this, SLOT(downloadFromServer(QByteArray)));
-                        QMessageBox::information(this, tr("Komunikat aplikacji klienckiej"),
-                            tr("Użytkownik %1 zalogowany pomyślnie!")
-                                                 .arg(logUser));
-                        }
-                        else if(response == "error")
-                        {
-                            QMessageBox::information(this, tr("Komunikat aplikacji klienckiej"),
-                                tr("Błędny login lub hasło"));
-                        }
-                        qDebug() << "Response  " << response;
+                        QMessageBox::information(this, tr("Message of the client application"),
+                            tr("User %1 logged in successfully!")
+                                .arg(logUser));
                     }
-                else if(check == "reg")
-                {
-                     QString login = dane.takeAt(0);
-                     if(login != "")
-                     {
-                         QString password = dane.takeAt(0);
-                         QMessageBox::information(this, tr("Komunikat aplikacji klienckiej"),
-                         tr("Użytkownik %1 zarejestrowany pomyślnie!\nHasło: %2")
-                         .arg(login).arg(password));
-                     }
+                    else if (response == "error") {
+                        QMessageBox::information(this, tr("Message of the client application"),
+                            tr("Bad login or password"));
+                    }
                 }
-                else if(check == "send")
-                {
-                    qDebug() << "POWINNO UPDATOWAC";
+                else if (check == "reg") {
+                    QString login = dane.takeAt(0);
+                    if (login != "") {
+                        QString password = dane.takeAt(0);
+                        QMessageBox::information(this, tr("Message of the client application"),
+                            tr("User %1 registered successfully!\nHashed password: %2")
+                                .arg(login)
+                                .arg(password));
+                    }
+                }
+                else if (check == "send") {
+
                     fileList = new FileList(this);
                     fileList->show();
                     fileList->setLogin(logUser);
                     connect(fileList, SIGNAL(sendFile(QByteArray)), this, SLOT(sendFileToServer(QByteArray)));
                     connect(fileList, SIGNAL(getFile(QByteArray)), this, SLOT(downloadFromServer(QByteArray)));
                     QString response = dane.takeAt(0);
-                    QString trash = dane.takeAt(0);//------------------------------------------------
-                    QString trash2 = dane.takeAt(0);//-ZMIENNE USUWAJĄCE ZŁE ODP Z SERWERA-----------
-                    QString trash3 = dane.takeAt(0);//-----------------------------------------------
+                    QString trash = dane.takeAt(0); //------------------------------------------------
+                    QString trash2 = dane.takeAt(0); //-ZMIENNE USUWAJĄCE ZŁE ODP Z SERWERA-----------
+                    QString trash3 = dane.takeAt(0); //-----------------------------------------------
                     fileList->updateAll(dane);
-                    if(response == "success")
-                    {
+                    if (response == "success") {
                         fileList->showSuccess();
                     }
-                    else
-                    {
+                    else {
                         fileList->showError();
                     }
-
                 }
-                else if(check=="get")
-                {
-                    qDebug() << "Przyszedł plik";
+                else if (check == "get") {
+
                     QString login = dane.takeAt(0);
                     QString filename = dane.takeAt(0);
-                    int toRemove = 4+login.length()+1+filename.length()+1;
-                    if (login != "" && filename != "")
-                    {
-                            FileManager * fm = new FileManager(this);
-                            QFile * plik = new QFile(filename);
-                            fm->createDirectory(login);
-                            if (!plik->open(QIODevice::ReadWrite))
-                            {
-                                qDebug() << "taki chce otworzyc"+filename;
-                            }
-                            else
-                            {
-                                QByteArray buffer = data.remove(0,toRemove);
-                                plik->write(buffer);
-                                plik->close();
-                                fm->addFile(login,plik);
-                                qDebug() << "dodano";
-                                //tworzenie odpowiedzi dla klienta
-
-                            }
+                    int toRemove = 4 + login.length() + 1 + filename.length() + 1;
+                    if (login != "" && filename != "") {
+                        FileManager* fm = new FileManager(this);
+                        QFile* plik = new QFile(filename);
+                        fm->createDirectory(login);
+                        if (!plik->open(QIODevice::ReadWrite)) {
+                        }
+                        else {
+                            QByteArray buffer = data.remove(0, toRemove);
+                            plik->write(buffer);
+                            plik->close();
+                            fm->addFile(login, plik);
+                        }
                     }
                 }
-
-
             }
         }
     }
-
 }
 bool client::writeData(QByteArray data)
 {
@@ -214,7 +187,7 @@ void client::on_Register_clicked()
 
 void client::getRegisterData(QString registerString)
 {
-    qDebug()<<registerString;
+    qDebug() << registerString;
     QByteArray regArray;
     regArray.append(registerString);
     writeData(regArray);
@@ -222,7 +195,7 @@ void client::getRegisterData(QString registerString)
 
 void client::sendLoginData(QString loginString)
 {
-    qDebug()<<loginString;
+    qDebug() << loginString;
     login = loginForm->getLogin();
     QByteArray regArray;
     regArray.append(loginString);
