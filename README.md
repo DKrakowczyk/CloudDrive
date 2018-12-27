@@ -4,7 +4,8 @@
 
 
   
-**CloudDrive** application allows you to store data on a remote server and allows you to manage uploaded resources.
+**CloudDrive**  application allows you to store data and to manage uploaded resources on a remote server.
+
 
 ##
 ### Server
@@ -43,8 +44,8 @@ After the connection has been correctly established, it is necessary to register
 After logging in, we gain access to the user panel.
 ![User panel](https://github.com/DKrakowczyk/CloudDrive/blob/master/_screenshots/_client/filemanager.PNG?raw=true)
 
- - To download a given element from the server resources it is necessary to **select it** and press the **Download the selected file** button. 
- - To delete a given element from the server resources it is necessary to **select it** and press the **Delete file** button. 
+ - To download a given element from the server resources remember to **select it** and press the **Download the selected file** button. 
+ - To delete a given element from the server resources remember to **select it** and press the **Delete file** button. 
 
 ##
 When using the server and client applications you will get various notifications informing about the course of a given process.
