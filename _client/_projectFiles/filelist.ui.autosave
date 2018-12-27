@@ -23,7 +23,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Menadżer plików</string>
+   <string>File manager</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/client/list.png</normaloff>:/client/list.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QToolTip {
@@ -2614,6 +2618,8 @@ QDateEdit::down-arrow:focus {
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

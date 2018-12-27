@@ -18,13 +18,17 @@ public:
     void updateAll(QList<QByteArray>);
     void showError();
     void showSuccess();
+    void showDeleted();
 private slots:
     void on_logoutButton_clicked();
     void on_addFileButton_clicked();
     void on_downloadButton_clicked();
+    void on_delButton_clicked();
+
 signals:
     void getFile(QByteArray);
     void sendFile(QByteArray);
+    void delFile(QByteArray);
 private:
     QString login;
     Ui::FileList *ui;

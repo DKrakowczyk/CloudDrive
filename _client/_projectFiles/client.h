@@ -30,6 +30,7 @@ private slots:
     void downloadFromServer(QByteArray);
     void on_disconnectClient_clicked();
     void on_connectTo_clicked();
+    void deleteFromServer(QByteArray);
 public slots:
     void showMainWindow();
 signals:

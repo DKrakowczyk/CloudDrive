@@ -98,6 +98,7 @@ void client::getResponseFromServer()
                         fileList->setLogin(logUser);
                         connect(fileList, SIGNAL(sendFile(QByteArray)), this, SLOT(sendFileToServer(QByteArray)));
                         connect(fileList, SIGNAL(getFile(QByteArray)), this, SLOT(downloadFromServer(QByteArray)));
+                        connect(fileList, SIGNAL(delFile(QByteArray)), this, SLOT(deleteFromServer(QByteArray)));
                         QMessageBox::information(this, tr("Message of the client application"),
                             tr("User %1 logged in successfully!")
                                 .arg(logUser));
@@ -124,6 +125,7 @@ void client::getResponseFromServer()
                     fileList->setLogin(logUser);
                     connect(fileList, SIGNAL(sendFile(QByteArray)), this, SLOT(sendFileToServer(QByteArray)));
                     connect(fileList, SIGNAL(getFile(QByteArray)), this, SLOT(downloadFromServer(QByteArray)));
+                    connect(fileList, SIGNAL(delFile(QByteArray)), this, SLOT(deleteFromServer(QByteArray)));
                     QString response = dane.takeAt(0);
                     QString trash = dane.takeAt(0); //------------------------------------------------
                     QString trash2 = dane.takeAt(0); //-ZMIENNE USUWAJĄCE ZŁE ODP Z SERWERA-----------
@@ -131,6 +133,9 @@ void client::getResponseFromServer()
                     fileList->updateAll(dane);
                     if (response == "success") {
                         fileList->showSuccess();
+                    }
+                    else if(response == "deleted"){
+                        fileList->showDeleted();
                     }
                     else {
                         fileList->showError();
@@ -232,4 +237,9 @@ void client::on_connectTo_clicked()
     ui->Register->setEnabled(1);
     ui->logIn->setEnabled(1);
     ui->disconnectClient->setEnabled(1);
+}
+//Metoda wysylajaca dane do usuniecia z serwera
+void client::deleteFromServer(QByteArray delString)
+{
+    writeData(delString);
 }

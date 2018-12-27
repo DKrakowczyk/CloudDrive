@@ -39,12 +39,17 @@ void FileList::updateAll(QList<QByteArray> lista)
 void FileList::showSuccess()
 {
     QMessageBox::information(this, tr("Message of the client application"),
-        tr("Plik został przesłany pomyślnie."));
+        tr("The file has been successfully sent."));
 }
 void FileList::showError()
 {
     QMessageBox::critical(this, tr("Message of the client application"),
         tr("There was a problem with uploading the file."));
+}
+void FileList::showDeleted()
+{
+    QMessageBox::information(this, tr("Message of the client application"),
+        tr("The file has been successfully removed from server."));
 }
 void FileList::on_addFileButton_clicked()
 {
@@ -79,4 +84,17 @@ void FileList::on_downloadButton_clicked()
     qDebug() << downloadString;
     QMessageBox::information(this, tr("Message of the client application"),
         tr("The file has been successfully downloaded."));
+}
+
+void FileList::on_delButton_clicked()
+{
+    QString filename = ui->listWidget->currentItem()->text();
+        if(filename!="")
+        {
+        QByteArray downloadString;
+        downloadString.append("del|"+login+"|"+filename+"|");
+        emit delFile(downloadString);
+        qDebug() << downloadString;
+        this->close();
+        }
 }
