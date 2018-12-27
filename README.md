@@ -1,7 +1,7 @@
 ## CloudDrive
 | C++ | QT |
 |--|--|
-|
+
 
   
 **CloudDrive** application allows you to store data on a remote server and allows you to manage uploaded resources.
