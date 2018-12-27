@@ -23,7 +23,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Zaloguj się do serwera</string>
+   <string>Log in</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/client/login.png</normaloff>:/client/login.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">#verticalLayout, .verticalLayout, QVBoxLayout{
@@ -2611,6 +2615,8 @@ QDateEdit::down-arrow:focus {
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
