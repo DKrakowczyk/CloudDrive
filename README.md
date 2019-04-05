@@ -1,4 +1,5 @@
-## CloudDrive
+<p align="center"><img src="logo/horizontal.png" alt="CloudDrive" height="120px"></p>
+
 | C++ | QT |
 |--|--|
 
